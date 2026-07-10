@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { releases, blogPosts } from "@/lib/schematic-data";
 
-const BASE_URL = "";
+const BASE_URL = "https://schematic.ilyas-e-dawoodjee.workers.dev";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
