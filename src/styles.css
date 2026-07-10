@@ -1,0 +1,339 @@
+@import "tw-animate-css";
+@import "tailwindcss" source(none);
+
+@source "../src";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-cyan: var(--cyan);
+  --color-cyan-glow: var(--cyan-glow);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --shadow-glow: 0 0 40px -10px var(--cyan-glow);
+  --shadow-glow-strong: 0 0 60px -5px var(--cyan-glow);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* Schematic dark IDE palette */
+  --background: #0b1220;
+  --foreground: #f8fafc;
+  --surface: #0f1a2a;
+  --surface-elevated: #121d2c;
+  --card: #111b2a;
+  --card-foreground: #f8fafc;
+  --popover: #0b1421;
+  --popover-foreground: #f8fafc;
+  --primary: #4bddd4;
+  --primary-foreground: #0b1220;
+  --secondary: #0e1726;
+  --secondary-foreground: #f8fafc;
+  --muted: #0e1726;
+  --muted-foreground: #94a3b8;
+  --accent: #111827;
+  --accent-foreground: #f8fafc;
+  --destructive: #b91c1c;
+  --destructive-foreground: #fca5a5;
+  --border: #243244;
+  --input: #263548;
+  --ring: #4bddd4;
+  --cyan: #4bddd4;
+  --cyan-bright: #35d9f2;
+  --cyan-soft: #67e8f9;
+  --cyan-glow: rgba(75, 221, 212, 0.35);
+  --input-blue: #38bdf8;
+  --output-green: #22c55e;
+  --action-purple: #a78bfa;
+  --warning-amber: #f59e0b;
+  --soft-text: #cbd5e1;
+  --secondary-text: #aab8d0;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  code,
+  pre,
+  .mono {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer utilities {
+  .text-cyan {
+    color: var(--cyan);
+  }
+  .bg-cyan {
+    background-color: var(--cyan);
+  }
+  .border-cyan {
+    border-color: var(--cyan);
+  }
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .glow-strong {
+    box-shadow: var(--shadow-glow-strong);
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, #16202f 1px, transparent 1px),
+      linear-gradient(to bottom, #16202f 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-soft));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Animated schematic grid background */
+.schematic-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: #0b1220;
+  background-image:
+    linear-gradient(to right, #16202f 1px, transparent 1px),
+    linear-gradient(to bottom, #16202f 1px, transparent 1px);
+  background-size: 30px 30px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Centered opaque rail: content sits on solid background, animated
+   schematic lines are only visible in the side gutters around it. */
+.page-rail {
+  position: relative;
+  z-index: 1;
+  margin-inline: auto;
+  max-width: 1180px;
+  min-height: 100vh;
+  background-color: var(--background);
+  border-inline: 1px solid var(--border);
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.55);
+}
+@media (max-width: 1240px) {
+  .page-rail {
+    border-inline: none;
+    box-shadow: none;
+  }
+}
+
+.scroll-step,
+.scroll-piece {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-step {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(5px);
+    animation: scroll-step-reveal both ease-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+
+  .scroll-piece {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(4px);
+    animation: scroll-piece-reveal both ease-out;
+    animation-timeline: view();
+    animation-range: entry 8% cover 36%;
+  }
+}
+
+@keyframes scroll-step-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes scroll-piece-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-step,
+  .scroll-piece {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+  }
+}
+
+/* Track sits exactly on a grid line; head moves along it leaving a short trail. */
+.schematic-track {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  overflow: hidden;
+}
+.schematic-track.vertical {
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.schematic-head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--head-length, 260px);
+  height: 1px;
+  opacity: var(--head-opacity, 0.85);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(75, 221, 212, 0.1) 55%,
+    rgba(75, 221, 212, 0.5) 85%,
+    var(--cyan-bright) 100%
+  );
+  filter: drop-shadow(0 0 4px var(--cyan-bright)) drop-shadow(0 0 8px var(--cyan-glow));
+  animation-name: head-h;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+  will-change: transform, opacity;
+}
+.schematic-track.vertical .schematic-head {
+  width: 1px;
+  height: var(--head-length, 260px);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(75, 221, 212, 0.1) 55%,
+    rgba(75, 221, 212, 0.5) 85%,
+    var(--cyan-bright) 100%
+  );
+  animation-name: head-v;
+}
+.schematic-head.reverse {
+  animation-name: head-h-rev;
+}
+.schematic-track.vertical .schematic-head.reverse {
+  animation-name: head-v-rev;
+}
+
+@keyframes head-h {
+  0% {
+    transform: translateX(-120px);
+    opacity: 0;
+  }
+  4% {
+    opacity: var(--head-opacity, 1);
+  }
+  96% {
+    opacity: var(--head-opacity, 1);
+  }
+  100% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+@keyframes head-h-rev {
+  0% {
+    transform: translateX(100vw) scaleX(-1);
+    opacity: 0;
+  }
+  4% {
+    opacity: var(--head-opacity, 1);
+  }
+  96% {
+    opacity: var(--head-opacity, 1);
+  }
+  100% {
+    transform: translateX(-120px) scaleX(-1);
+    opacity: 0;
+  }
+}
+@keyframes head-v {
+  0% {
+    transform: translateY(-120px);
+    opacity: 0;
+  }
+  4% {
+    opacity: var(--head-opacity, 1);
+  }
+  96% {
+    opacity: var(--head-opacity, 1);
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+@keyframes head-v-rev {
+  0% {
+    transform: translateY(100vh) scaleY(-1);
+    opacity: 0;
+  }
+  4% {
+    opacity: var(--head-opacity, 1);
+  }
+  96% {
+    opacity: var(--head-opacity, 1);
+  }
+  100% {
+    transform: translateY(-120px) scaleY(-1);
+    opacity: 0;
+  }
+}

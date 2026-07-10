@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Schematic topic inspector</title>
+  <desc id="desc">A Schematic topic inspector with live topics, message fields, metrics, and a range sample chart.</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f1a2a"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+    <linearGradient id="chart" x1="0" x2="1">
+      <stop offset="0" stop-color="#4bddd4" stop-opacity=".2"/>
+      <stop offset=".5" stop-color="#35d9f2"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#172436" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="#0b1220"/>
+  <rect width="1200" height="675" fill="url(#grid)" opacity=".58"/>
+  <rect x="42" y="42" width="290" height="591" rx="14" fill="#0b1421" stroke="#243244"/>
+  <text x="72" y="82" fill="#4bddd4" font-family="JetBrains Mono, monospace" font-size="13">LIVE TOPICS</text>
+  <g font-family="JetBrains Mono, monospace" font-size="14">
+    <rect x="70" y="108" width="232" height="40" rx="8" fill="#4bddd4" fill-opacity=".13" stroke="#4bddd4" stroke-opacity=".45"/>
+    <text x="92" y="133" fill="#67e8f9">/scan</text>
+    <text x="244" y="133" fill="#cbd5e1">20hz</text>
+    <text x="92" y="190" fill="#94a3b8">/tf</text>
+    <text x="252" y="190" fill="#94a3b8">60hz</text>
+    <text x="92" y="246" fill="#94a3b8">/odom</text>
+    <text x="244" y="246" fill="#94a3b8">30hz</text>
+    <text x="92" y="302" fill="#94a3b8">/cmd_vel</text>
+    <text x="252" y="302" fill="#94a3b8">10hz</text>
+    <text x="92" y="358" fill="#94a3b8">/diagnostics</text>
+    <text x="252" y="358" fill="#94a3b8">1hz</text>
+  </g>
+  <rect x="370" y="42" width="788" height="250" rx="14" fill="url(#surface)" stroke="#243244"/>
+  <text x="402" y="82" fill="#4bddd4" font-family="JetBrains Mono, monospace" font-size="13">MESSAGE TREE</text>
+  <g font-family="JetBrains Mono, monospace" font-size="15">
+    <text x="402" y="128" fill="#f8fafc">sensor_msgs/msg/LaserScan</text>
+    <text x="432" y="166" fill="#94a3b8">header.stamp</text>
+    <text x="694" y="166" fill="#cbd5e1">179.24s</text>
+    <text x="432" y="204" fill="#94a3b8">angle_increment</text>
+    <text x="694" y="204" fill="#cbd5e1">0.00436</text>
+    <text x="432" y="242" fill="#94a3b8">ranges[0..719]</text>
+    <text x="694" y="242" fill="#67e8f9">float32[]</text>
+  </g>
+  <rect x="370" y="332" width="370" height="301" rx="14" fill="url(#surface)" stroke="#243244"/>
+  <text x="402" y="373" fill="#4bddd4" font-family="JetBrains Mono, monospace" font-size="13">METRICS</text>
+  <g font-family="Inter, sans-serif">
+    <text x="402" y="438" fill="#94a3b8" font-size="15">Rate</text>
+    <text x="596" y="438" fill="#f8fafc" font-size="34" font-weight="700">20.1 hz</text>
+    <text x="402" y="512" fill="#94a3b8" font-size="15">Bandwidth</text>
+    <text x="578" y="512" fill="#f8fafc" font-size="34" font-weight="700">148 kb/s</text>
+    <text x="402" y="575" fill="#94a3b8" font-size="15">Dropped messages</text>
+    <text x="660" y="575" fill="#22c55e" font-size="22" font-weight="700">0</text>
+  </g>
+  <rect x="786" y="332" width="372" height="301" rx="14" fill="url(#surface)" stroke="#243244"/>
+  <text x="818" y="373" fill="#4bddd4" font-family="JetBrains Mono, monospace" font-size="13">RANGE SAMPLE</text>
+  <g stroke="#243244">
+    <path d="M828 575H1114"/>
+    <path d="M828 518H1114"/>
+    <path d="M828 461H1114"/>
+  </g>
+  <path d="M828 557 C860 524 890 538 918 488 C948 435 990 512 1020 468 C1056 416 1084 438 1114 396" fill="none" stroke="url(#chart)" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M828 557 C860 524 890 538 918 488 C948 435 990 512 1020 468 C1056 416 1084 438 1114 396 L1114 575 L828 575 Z" fill="#4bddd4" opacity=".08"/>
+</svg>
