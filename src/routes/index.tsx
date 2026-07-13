@@ -91,8 +91,8 @@ function Index() {
             How Schematic actually works.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            It is a ROS 2 workspace loop, not a generic canvas. As you move down the page, the
-            pieces appear in the same order you use them in the app.
+            ROS 2 systems are spread across processes, interfaces, and configuration. Schematic
+            brings them together as a graph you can explore, assemble, connect, and operate.
           </p>
         </div>
 
@@ -153,13 +153,18 @@ function ScrollWorkflow() {
 function WorkflowStep({ step, index }: { step: WorkflowStepData; index: number }) {
   return (
     <article className="scroll-step grid gap-8 border-b border-border/70 py-10 md:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] md:items-start md:gap-10 lg:gap-12">
-      <div className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 sm:grid-cols-[3rem_minmax(0,1fr)]">
-        <span className="row-span-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cyan/35 bg-background font-mono text-xs text-cyan shadow-[0_0_24px_rgba(75,221,212,0.14)] sm:h-12 sm:w-12 sm:text-sm">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <p className="self-center font-mono text-xs uppercase tracking-widest text-cyan">
-          {step.eyebrow}
-        </p>
+      <div className="min-w-0">
+        <div className="flex items-center gap-4 sm:gap-5">
+          <span
+            aria-hidden="true"
+            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-cyan/40 bg-surface/45 font-mono text-xs leading-none tabular-nums text-cyan"
+          >
+            <span className="translate-y-px">{String(index + 1).padStart(2, "0")}</span>
+          </span>
+          <p className="font-mono text-xs leading-5 uppercase tracking-widest text-cyan">
+            {step.eyebrow}
+          </p>
+        </div>
         <h3 className="mt-5 break-words text-xl font-semibold leading-tight text-foreground sm:text-3xl">
           {step.title}
         </h3>
@@ -171,51 +176,54 @@ function WorkflowStep({ step, index }: { step: WorkflowStepData; index: number }
   );
 }
 
-function WorkspaceVisual() {
+function LibraryVisual() {
   return (
-    <div className="scroll-piece border-y border-border bg-[#0F172A]/70 px-4 py-5 sm:px-6">
-      <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
-        workspace startup
+    <div className="scroll-piece border-y border-border bg-[#0B1220] px-4 py-5 sm:px-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="font-mono text-xs uppercase tracking-widest text-slate-500">ROS 2 palette</p>
+        <p className="font-mono text-xs text-cyan">search everything</p>
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <FeatureCell label="packages" value="browse the software available to your system" />
+        <FeatureCell label="executables" value="individual ROS nodes ready to place" />
+        <FeatureCell label="launch files" value="larger subsystems as reusable blocks" />
+      </div>
+      <p className="mt-5 border-t border-border pt-4 font-mono text-xs text-slate-500">
+        pin what matters · inspect details · add from the palette or directly on the canvas
       </p>
-      <div className="mt-5 space-y-4 font-mono text-xs">
-        <StatusLine label="validate" value="src/ found" />
-        <StatusLine label="prepare" value=".schematic/graphs ready" />
-        <StatusLine label="build" value="colcon build + install/setup.bash" />
-        <StatusLine label="environment" value="ROS overlay captured" />
-      </div>
-      <div className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 font-mono text-xs">
-        <span className="text-slate-500">workspace terminal attached</span>
-        <span className="text-emerald-300">ready</span>
-      </div>
     </div>
   );
 }
 
-function PackagesVisual() {
+function CanvasVisual() {
   return (
     <div className="scroll-piece border-y border-border bg-[#0B1220] px-4 py-5 sm:px-6">
       <div className="grid gap-7 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div className="min-w-0 flex-1">
           <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
-            package browser
+            building blocks
           </p>
           <div className="mt-5 space-y-3">
-            <ResourceRow label="Executables" value="drop as runnable nodes" tone="cyan" />
-            <ResourceRow label="Launch Files" value="drop as launch includes" tone="violet" />
-            <ResourceRow label="Parameter Files" value="apply to nodes" tone="amber" />
-            <ResourceRow label="RViz Configs" value="attach to graph" tone="sky" />
+            <ResourceRow label="Executable" value="one runnable ROS node" tone="cyan" />
+            <ResourceRow label="Launch system" value="many nodes behind one block" tone="violet" />
+            <ResourceRow
+              label="Bag play / record"
+              value="ROS data in the same graph"
+              tone="amber"
+            />
           </div>
         </div>
         <div className="min-w-0 border-t border-border pt-6 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
           <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
-            graph document
+            system canvas
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <GraphDocItem title="camera_node" sub="executable node" />
-            <GraphDocItem title="bringup.launch.py" sub="launch include" />
-            <GraphDocItem title="nav2_params.yaml" sub="parameter layer" />
-            <GraphDocItem title="nav2.rviz" sub="attached RViz config" />
+            <GraphDocItem title="camera_driver" sub="executable" />
+            <GraphDocItem title="perception" sub="launch system" />
+            <GraphDocItem title="navigator" sub="lifecycle node" />
+            <GraphDocItem title="sensor_data" sub="bag playback" />
           </div>
+          <p className="mt-4 font-mono text-xs text-cyan">drag · position · duplicate · save</p>
         </div>
       </div>
     </div>
@@ -228,9 +236,9 @@ function ProbeVisual() {
       <div className="grid gap-7 sm:grid-cols-2">
         <div className="min-w-0 flex-1">
           <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
-            runtime probe
+            interface discovery
           </p>
-          <h4 className="mt-3 text-xl font-semibold text-slate-50">executable / launch include</h4>
+          <h4 className="mt-3 text-xl font-semibold text-slate-50">executable + launch include</h4>
           <div className="mt-5 space-y-3 font-mono text-xs">
             <RuntimeLine dot="bg-cyan" label="topics" value="publishers + subscribers" />
             <RuntimeLine dot="bg-orange-400" label="services" value="servers + clients" />
@@ -240,15 +248,67 @@ function ProbeVisual() {
         </div>
         <div className="min-w-0 flex-1 border-t border-border pt-6 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
           <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
-            inspector actions
+            visible on the block
           </p>
           <div className="mt-4 space-y-2 font-mono text-xs text-slate-400">
-            <p>show/hide service ports on graph</p>
-            <p>create callable service chips</p>
-            <p>edit node names, namespaces, params, remaps</p>
-            <p className="text-cyan">topic echo opens from topic rows</p>
+            <p>typed input and output ports</p>
+            <p>services grouped by server and client</p>
+            <p>actions bundled as one interaction</p>
+            <p className="text-cyan">parameters and arguments ready to edit</p>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ComposeVisual() {
+  return (
+    <div className="scroll-piece border-y border-border bg-[#0B1220] px-4 py-5 sm:px-6">
+      <div className="grid gap-7 sm:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
+        <div className="min-w-0">
+          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">typed graph</p>
+          <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 font-mono text-xs">
+            <PortCard title="camera" detail="/image_raw" tone="cyan" />
+            <span className="text-cyan">──▶</span>
+            <PortCard title="detector" detail="image input" tone="violet" />
+            <PortCard title="planner" detail="service client" tone="amber" />
+            <span className="text-orange-300">──▶</span>
+            <PortCard title="navigator" detail="service server" tone="orange" />
+          </div>
+          <p className="mt-4 font-mono text-xs text-slate-500">
+            compatible ports become ROS remaps at run time
+          </p>
+        </div>
+        <div className="min-w-0 border-t border-border pt-6 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
+          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+            connection logic
+          </p>
+          <div className="mt-4 space-y-2 font-mono text-xs text-slate-400">
+            <p>publishers connect to subscribers</p>
+            <p>clients connect to service servers</p>
+            <p>incompatible interface types stay separate</p>
+            <p className="text-cyan">wires become ROS names and remaps</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ConfigureVisual() {
+  return (
+    <div className="scroll-piece border-y border-border bg-[#0F172A]/70 px-4 py-5 sm:px-6">
+      <p className="font-mono text-xs uppercase tracking-widest text-slate-500">visual inspector</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <FeatureCell label="identity" value="node name · namespace" />
+        <FeatureCell label="interfaces" value="topic names · QoS" />
+        <FeatureCell label="parameters" value="YAML · manual values" />
+        <FeatureCell label="arguments" value="launch · command line" />
+      </div>
+      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-border pt-4 font-mono text-xs text-slate-500">
+        <span>edit the selected block without leaving the graph</span>
+        <span className="text-cyan">apply simulation time across the whole system</span>
       </div>
     </div>
   );
@@ -257,30 +317,54 @@ function ProbeVisual() {
 function RunVisual() {
   return (
     <div className="scroll-piece border-y border-border bg-[#060B13] px-4 py-5 font-mono text-xs sm:px-6">
-      <p className="text-slate-500">active graph terminal</p>
+      <p className="text-slate-500">live graph</p>
       <div className="mt-6 space-y-2 text-slate-400">
         <p>
           <span className="text-cyan">$</span> Run Graph
         </p>
-        <p>[Schematic] launch includes + executable nodes started</p>
-        <p>[Schematic] topic frequency monitors attached</p>
-        <p className="text-emerald-300">[Schematic] graph run active</p>
+        <p>[Schematic] visual connections applied to ROS 2</p>
+        <p>[Schematic] nodes and launch systems started</p>
+        <p className="text-emerald-300">[Schematic] live signals connected to the canvas</p>
       </div>
-      <div className="mt-7 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
-        <RuntimeBadge label="lifecycle" value="configure / activate" />
-        <RuntimeBadge label="service chip" value="call live endpoints" />
-        <RuntimeBadge label="tools" value="rviz2 / gazebo / rqt_graph" />
+      <div className="mt-7 grid gap-3 border-t border-border pt-5 sm:grid-cols-2 lg:grid-cols-4">
+        <RuntimeBadge label="observe" value="topic echo + live Hz" />
+        <RuntimeBadge label="control" value="services + lifecycle" />
+        <RuntimeBadge label="edit live" value="params + new relays" />
+        <RuntimeBadge label="data" value="record + replay bags" />
       </div>
     </div>
   );
 }
 
-function StatusLine({ label, value }: { label: string; value: string }) {
+function PortCard({
+  title,
+  detail,
+  tone,
+}: {
+  title: string;
+  detail: string;
+  tone: "cyan" | "violet" | "amber" | "orange";
+}) {
+  const toneClass = {
+    cyan: "border-cyan/40 text-cyan",
+    violet: "border-violet-400/40 text-violet-300",
+    amber: "border-amber-400/40 text-amber-300",
+    orange: "border-orange-400/40 text-orange-300",
+  }[tone];
+
   return (
-    <div className="grid grid-cols-[0.5rem_minmax(0,6.5rem)_minmax(0,1fr)] items-start gap-x-3 gap-y-1">
-      <span className="mt-1.5 h-2 w-2 rounded-full bg-cyan" />
-      <span className="min-w-0 break-words text-slate-500">{label}</span>
-      <span className="min-w-0 break-words text-slate-200">{value}</span>
+    <div className={`min-w-0 border bg-[#0F172A] px-3 py-3 ${toneClass}`}>
+      <p className="break-words">{title}</p>
+      <p className="mt-1 break-words text-slate-500">{detail}</p>
+    </div>
+  );
+}
+
+function FeatureCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="border border-border bg-[#0B1220] px-3 py-3 font-mono text-xs">
+      <p className="text-cyan">{label}</p>
+      <p className="mt-2 leading-relaxed text-slate-500">{value}</p>
     </div>
   );
 }
@@ -349,27 +433,39 @@ type WorkflowStepData = {
 
 const workflowSteps: WorkflowStepData[] = [
   {
-    eyebrow: "workspace",
-    title: "Open a real ROS 2 workspace.",
-    body: "Schematic validates the workspace, creates its .schematic graph folder, runs the build/sourcing flow, and captures the ROS environment the editor will use.",
-    visual: <WorkspaceVisual />,
+    eyebrow: "explore",
+    title: "Find the ROS 2 components you want to work with.",
+    body: "Schematic gathers the software available to your system into a searchable visual palette. Browse packages, inspect what they provide, and reach the executables and launch systems you need without hunting through commands and file trees.",
+    visual: <LibraryVisual />,
   },
   {
-    eyebrow: "resources",
-    title: "Build the graph from package resources.",
-    body: "The left panel is a package browser: executables become runnable nodes, launch files become launch includes, params can be applied, and RViz configs can sit on the graph.",
-    visual: <PackagesVisual />,
+    eyebrow: "assemble",
+    title: "Lay out the system as a graph of real ROS 2 software.",
+    body: "Drop individual nodes, complete launch systems, and recorded-data tools onto the canvas. Each block represents something Schematic can actually run, so the diagram is the system—not a disconnected drawing of it.",
+    visual: <CanvasVisual />,
   },
   {
-    eyebrow: "probe",
-    title: "Probe, wire, and edit the discovered interfaces.",
-    body: "Runtime probes populate topics, services, actions, parameters, and launch arguments. The inspector is where you tune remaps, parameter layers, service chips, and topic echo.",
+    eyebrow: "reveal",
+    title: "See how every component communicates.",
+    body: "Schematic discovers topics, services, actions, parameters, and arguments, then exposes them directly on each block. Interfaces that normally exist only in source code or command output become visible ports and controls you can reason about at a glance.",
     visual: <ProbeVisual />,
   },
   {
-    eyebrow: "run",
-    title: "Run and control the graph from Schematic.",
-    body: "Run Graph starts executables and launch includes in the prepared workspace terminal, tracks topic frequency, exposes lifecycle controls, supports live service calls, and can launch ROS tools.",
+    eyebrow: "connect",
+    title: "Define ROS 2 behavior by drawing the connections.",
+    body: "Wire publishers to subscribers and service clients to servers using typed ports. Schematic checks compatibility and translates the visual topology into the topic names, service names, and remaps the running system needs.",
+    visual: <ComposeVisual />,
+  },
+  {
+    eyebrow: "configure",
+    title: "Tune each component without losing sight of the system.",
+    body: "Select a block to edit its identity, namespace, topic settings, QoS, parameters, and arguments beside the canvas. Configuration stays attached to the component it affects while the full graph remains visible.",
+    visual: <ConfigureVisual />,
+  },
+  {
+    eyebrow: "run + interact",
+    title: "Turn the canvas into a live control surface.",
+    body: "Run the graph and watch ROS 2 activity return to the same visual model. Inspect topic data and frequency, call services, drive lifecycle transitions, change parameters, add connections while running, and record or replay data without breaking the flow.",
     visual: <RunVisual />,
   },
 ];
